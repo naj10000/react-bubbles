@@ -1,33 +1,31 @@
 
 
-import React, { Component } from 'react'
+import React, { useState }  from 'react'
 import axiosWithAuth from './axiosWithAuth';
 
-export default class Login extends Component {
-  state={
-    credentials: {
-      username: '',
-      password: ''
-    }
-  }
+const Login = (props) =>{
+  const [creds, setCreds] = useState({
+     username: '',
+     password: ''
+  })
 
-  changeHandler = e => {
-    this.setState({
-      credentials: {
-        ...this.state.credentials,
+   const changeHandler = e => {
+    setCreds({
+      
+        ...creds,
         [e.target.name]: e.target.value
-      }
+      
     })
   }
 
-  login = e => {
+   const login = e => {
     e.preventDefault();
     axiosWithAuth()
-    .post('/api/login', this.state.credentials)
+    .post('/api/login', creds)
     .then(res => {
       console.log(res.data)
-      localStorage.setItem('token', JSON.stringify(res.data.payload))
-      this.props.history.push('/protected');
+      window.localStorage.setItem('token', res.data.payload)
+      props.history.push('/protected');
     })
     .catch(err => console.log({err}))
   }
@@ -36,23 +34,23 @@ export default class Login extends Component {
 
 
 
-  render() {
+  
     return (
       <div>
 
-<form onSubmit={this.login}>
+<form onSubmit={login}>
                     <input
                     type="text"
                     name="username"
-                    value={this.state.credentials.username}
-                    onChange={this.changeHandler}
+                    value={creds.username}
+                    onChange={changeHandler}
                     
                     />
                     <input
                         type="password"
                         name="password"
-                        value={this.state.credentials.password}
-                        onChange= {this.changeHandler}
+                        value={creds.password}
+                        onChange= {changeHandler}
                     
                     />
                     <button>Login</button>
@@ -60,6 +58,7 @@ export default class Login extends Component {
         
       </div>
     )
-  }
+  
 }
 
+export default Login;

@@ -9,10 +9,11 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <Switch>
+      <Switch>
+      <Route exact path="/" component={Login} />
         <PrivateRoute exact path="protected" component={BubblePage}/>
-        <Route exact path="/" component={Login} />
         </Switch>
+        
       </div>
     </Router>
   );
